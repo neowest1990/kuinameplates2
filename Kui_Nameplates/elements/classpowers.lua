@@ -326,10 +326,13 @@ local function PowerUpdate()
     local form = GetShapeshiftForm()
     local cur
 	local animacharged = false
-	local isKnownAnimaCharged = IsSpellKnown(385616,false)
-	if(isKnownAnimaCharged) then
-		animacharged = GetUnitChargedPowerPoints('player')
+	if(GetUnitChargedPowerPoints ~= nil) then
+		local isKnownAnimaCharged = IsSpellKnown(385616,false)
+		if(isKnownAnimaCharged) then
+			animacharged = GetUnitChargedPowerPoints('player')
+		end
 	end
+	
 
     if kui.WRATH and power_type == 14 then
         cur = GetComboPoints('player','target')
