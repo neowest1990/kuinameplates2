@@ -382,7 +382,11 @@ local function PowerUpdate()
 			end
             if at_max then
 				if(is_animacharged == true) then
-					icon:AnimaChargedActive()
+                    if(i == cur) then
+                        icon:AnimaChargedActive()
+                    else
+                        icon:AnimaCharged()
+                    end
 				else
 					icon:Active()
 				end
@@ -394,7 +398,11 @@ local function PowerUpdate()
             else
                 if i <= cur then
                     if(is_animacharged == true) then
-						icon:AnimaChargedActive()
+                        if(i == cur) then
+                            icon:AnimaChargedActive()
+                        else
+                            icon:AnimaCharged()
+                        end
 					else
 						icon:Active()
 					end
@@ -414,12 +422,7 @@ local function PowerUpdate()
 								icon:GraduateFill(0)
 							end
                         else
-                            -- partially filled
-                            if(is_animacharged == true) then
-								icon:AnimaChargedActive()
-							else
-								icon:Active()
-							end
+							icon:Active()
                             icon:GraduateFill(cur - floor(cur))
                         end
                     else

@@ -247,8 +247,8 @@ local default_config = {
     classpowers_colour_warlock     = {.9,.6,1},
     classpowers_colour_overflow    = {1,.3,.3},
     classpowers_colour_inactive    = {.5,.5,.5,.7},
-	classpowers_colour_animacharged    = {0,.874,1,1},
-	classpowers_colour_animacharged_active    = {1,0,0,1},
+    classpowers_colour_animacharged    = {0,.874,1,1},
+    classpowers_colour_animacharged_active    = {1,0,0,1},
 
     bossmod_enable = true,
     bossmod_control_visibility = true,
@@ -661,8 +661,8 @@ local function configChangedClassPowersColour()
 
     core.ClassPowers.colours.overflow = core.profile.classpowers_colour_overflow
     core.ClassPowers.colours.inactive = core.profile.classpowers_colour_inactive
-	core.ClassPowers.colours.animacharged = core.profile.classpowers_colour_animacharged
-	core.ClassPowers.colours.animacharged_active = core.profile.classpowers_colour_animacharged_active
+    core.ClassPowers.colours.animacharged = core.profile.classpowers_colour_animacharged
+    core.ClassPowers.colours.animacharged_active = core.profile.classpowers_colour_animacharged_active
 
     if addon:GetPlugin('ClassPowers').enabled then
         addon:GetPlugin('ClassPowers'):UpdateConfig()
@@ -965,11 +965,11 @@ function core:ConfigChanged(_,k,v)
 end
 function core:InitialiseConfig()
     --luacheck:globals KuiNameplatesCoreSaved KuiNameplatesCoreConfig
-    --[=[@alpha@
+    --@alpha@
     if not KuiNameplatesCoreSaved or not KuiNameplatesCoreSaved.SHUT_UP then
         addon:ui_print('Alpha version - Report issues to github.com/kesava-wow/kuinameplates2 and include the output of: /knp dump -- Thanks!')
     end
-    --@end-alpha@]=]
+    --@end-alpha@
 
     if KuiNameplatesCoreSaved then
         -- XXX TEMP 2.27

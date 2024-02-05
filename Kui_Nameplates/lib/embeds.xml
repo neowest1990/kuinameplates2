@@ -7,8 +7,8 @@
     <Script file="LibClassicCasterino\LibClassicCasterino.lua"/>
     <Include file="LibClassicDurations\LibClassicDurations.xml"/>
     @end-non-retail@-->
-    <!--@debug@
+    <!--@debug@-->
     <Script file="LibClassicCasterino\LibClassicCasterino.lua"/>
     <Include file="LibClassicDurations\LibClassicDurations.xml"/>
-    @end-debug@-->
+    <!--@end-debug@-->
 </Ui>
