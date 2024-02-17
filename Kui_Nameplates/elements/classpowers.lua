@@ -90,8 +90,8 @@ local colours = {
     WARLOCK     = { 1, .5, 1 },
     overflow    = { 1, .3, .3 },
     inactive    = { .5, .5, .5, .7 },
-	animacharged = {0,.874,1,1},
-	animacharged_active = {1,0,0,1}
+    animacharged = {0,.874,1,1},
+    animacharged_active = {1,0,0,1}
 }
 
 -- stagger colours
@@ -212,10 +212,10 @@ local function CreateIcon()
                 self:SetVertexColor(unpack(colours.overflow))
                 self:SetAlpha(1)
             end
-			icon.AnimaCharged = function(self)
+            icon.AnimaCharged = function(self)
                 self:SetVertexColor(unpack(colours.animacharged))
             end
-			icon.AnimaChargedActive = function(self)
+            icon.AnimaChargedActive = function(self)
                 self:SetVertexColor(unpack(colours.animacharged_active))
             end
         end
