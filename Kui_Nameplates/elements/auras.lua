@@ -112,7 +112,14 @@ local addon = KuiNameplates
 local kui = LibStub('Kui-1.0')
 local ele = addon:NewElement('Auras',1)
 local AuraLib
-local UnitAura = _G['UnitAura']
+
+local UnitAura = function(unitToken, index, filter)
+    if C_UnitAuras and C_UnitAuras.GetAuraDataByIndex then
+        return AuraUtil.UnpackAuraData(C_UnitAuras.GetAuraDataByIndex(unitToken, index, filter))
+    elseif _G.UnitAura then
+        return _G.UnitAura(unitToken, index, filter) end
+    return nil
+end
 
 local strlower,tinsert,tsort,     pairs,ipairs =
       strlower,tinsert,table.sort,pairs,ipairs
@@ -882,7 +889,7 @@ function ele:Initialise()
     self:RegisterCallback('PostUpdateAuraFrame')
     self:RegisterCallback('DisplayAura',true)
 
-    if kui.CLASSIC and not kui.WRATH then
+    if kui.CLASSIC and not kui.CATA then
         AuraLib = LibStub('LibClassicDurations',true)
         if not AuraLib then return end
 

@@ -1,14 +1,15 @@
-## Interface: 100105
+## Interface: 100207, 110000, 110002
 
 ## Author: Kesava
 ## Title: Kui |cff9966ffNameplates
 ## Notes: Kesava's nameplate framework.|nDoes nothing without a layout.
-## Version: 2.29.12
+## Version: 2.29.18
 ## IconTexture: 132177
 ## X-License: All Rights Reserved.
 ## X-Website: https://github.com/kesava-wow/kuinameplates2
 ## X-Curse-Project-ID: 35095
 ## X-WoWI-ID: 19390
+## X-Wago-ID: kNMd8qGz
 ## OptionalDeps: BigWigs, DBM-Core, RealMobHealth, ThreatClassic-1.0, LibThreatClassic2
 
 lib\embeds.xml

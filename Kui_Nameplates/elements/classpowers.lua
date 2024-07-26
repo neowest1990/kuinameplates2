@@ -257,7 +257,7 @@ local function UpdateIcons()
     end
 
     -- hack: for some reason UnitPowerMax returns 0 for DK runes in Wrath classic
-    if kui.WRATH and power_type == 5 then
+    if kui.CATA and power_type == 5 then
         power_max = 6
     end
 
@@ -586,7 +586,7 @@ end
 -- messages ####################################################################
 function ele:TargetUpdate()
     PositionFrame()
-    if kui.WRATH and class ~= 'DEATHKNIGHT' then
+    if kui.CATA and class ~= 'DEATHKNIGHT' then
         PowerUpdate()
     end
 end
@@ -631,7 +631,7 @@ function ele:PowerInit()
                 power_type = Enum.PowerType.ComboPoints
             end
         end
-    elseif kui.WRATH and class == 'DRUID' then
+    elseif kui.CATA and class == 'DRUID' then
         -- watch for shapeshifts into cat form
         self:RegisterEvent('UPDATE_SHAPESHIFT_FORM')
         local form = GetShapeshiftForm()
@@ -769,7 +769,7 @@ function ele:PowerEvent(event,_,power_type_rcv)
 end
 function ele:UPDATE_SHAPESHIFT_FORM()
     self:PowerInit()
-    if kui.WRATH then
+    if kui.CATA then
         PowerUpdate()
     end
 end
@@ -867,7 +867,7 @@ function ele:Initialise()
     self:RegisterCallback('PostPositionFrame')
 
     -- initialise powers
-    if kui.CLASSIC and not kui.WRATH then
+    if kui.CLASSIC and not kui.CATA then
         -- power types by class/spec
         powers = {
             DRUID = Enum.PowerType.ComboPoints,
@@ -877,11 +877,12 @@ function ele:Initialise()
         power_tags = {
             [Enum.PowerType.ComboPoints] = 'COMBO_POINTS',
         }
-    elseif kui.WRATH then
+    elseif kui.CATA then
         powers = {
             DEATHKNIGHT = Enum.PowerType.Runes,
             DRUID       = Enum.PowerType.ComboPoints,
             ROGUE       = Enum.PowerType.ComboPoints,
+            PALADIN     = Enum.PowerType.HolyPower,
         }
         power_tags = {
             [Enum.PowerType.Runes]         = 'RUNES',
