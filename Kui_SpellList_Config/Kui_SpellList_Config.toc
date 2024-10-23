@@ -1,9 +1,0 @@
-## Interface: 100000
-## Author: Kesava
-## Title: Kui |cff9966ffSpellList Config|r
-## Notes: Customise the aura filter used by Kui Nameplates
-## SavedVariables: KuiSpellListConfigSaved
-
-lib\embeds.xml
-
-main.lua

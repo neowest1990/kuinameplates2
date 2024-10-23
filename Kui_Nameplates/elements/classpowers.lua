@@ -90,8 +90,9 @@ local colours = {
     WARLOCK     = { 1, .5, 1 },
     overflow    = { 1, .3, .3 },
     inactive    = { .5, .5, .5, .7 },
-    animacharged = {0,.874,1,1},
-    animacharged_active = {1,0,0,1}
+    supercharged = {0,.874,1,1},
+    supercharged_active = {1,0,0,1},
+    additional_active = {0,1,0,1}
 }
 
 -- stagger colours
@@ -212,11 +213,14 @@ local function CreateIcon()
                 self:SetVertexColor(unpack(colours.overflow))
                 self:SetAlpha(1)
             end
-            icon.AnimaCharged = function(self)
-                self:SetVertexColor(unpack(colours.animacharged))
+            icon.SuperCharged = function(self)
+                self:SetVertexColor(unpack(colours.supercharged))
             end
-            icon.AnimaChargedActive = function(self)
-                self:SetVertexColor(unpack(colours.animacharged_active))
+            icon.SuperChargedActive = function(self)
+                self:SetVertexColor(unpack(colours.supercharged_active))
+            end
+            icon.AdditionalActive = function(self)
+                self:SetVertexColor(unpack(colours.additional_active))
             end
         end
     end
@@ -325,14 +329,27 @@ local function PowerUpdate()
     -- toggle icons based on current power
     local form = GetShapeshiftForm()
     local cur
-	local animacharged = false
-	if(GetUnitChargedPowerPoints ~= nil) then
-		local isKnownAnimaCharged = IsSpellKnown(385616,false)
-		if(isKnownAnimaCharged) then
-			animacharged = GetUnitChargedPowerPoints('player')
-		end
-	end
-	
+    local isKnownSuperCharger = IsPlayerSpell(470347)
+    local isKnownForcedInduction = IsPlayerSpell(470668)
+    local supercharged = false
+    local additional_combo_points = 0
+    if(isKnownSuperCharger) then
+        if(GetUnitChargedPowerPoints ~= nil) then
+           supercharged = GetUnitChargedPowerPoints('player')
+        end
+    end
+    if(supercharged) then
+        for i in pairs(supercharged) do
+            if supercharged[i] > 0 then
+                if(isKnownForcedInduction) then
+                    additional_combo_points = 3
+                else
+                    additional_combo_points = 2
+                end
+                break
+            end
+        end
+    end
 
     if kui.WRATH and power_type == 14 then
         cur = GetComboPoints('player','target')
@@ -369,68 +386,76 @@ local function PowerUpdate()
         end
     else
         local at_max = cur == #cpf.icons
-		local is_animacharged = false
+        local is_supercharged = false
+        local bonus_combo_points = 0
+        if cur > 0 then
+            bonus_combo_points = additional_combo_points
+        end
         for i,icon in ipairs(cpf.icons) do
-			is_animacharged = false
-			if animacharged then
-				for j in pairs(animacharged) do
-					if animacharged[j] == i then
-						is_animacharged = true
-						break
-					end
-				end
-			end
-            if at_max then
-				if(is_animacharged == true) then
-                    if(i == cur) then
-                        icon:AnimaChargedActive()
-                    else
-                        icon:AnimaCharged()
+            is_supercharged = false
+            if supercharged then
+                for j in pairs(supercharged) do
+                    if supercharged[j] == i then
+                        is_supercharged = true
+                        break
                     end
-				else
-					icon:Active()
-				end
-				icon:GraduateFill(1)
-				
+                end
+            end
+            if at_max then
+                if(bonus_combo_points > 0 and i <= bonus_combo_points) then
+                    icon:AdditionalActive()
+                else
+                    if(is_supercharged == true) then
+                        icon:SuperChargedActive()
+                    else
+                        icon:Active()
+                    end
+                end
+                icon:GraduateFill(1)
+
                 if icon.glow then
                     icon.glow:Show()
                 end
             else
-                if i <= cur then
-                    if(is_animacharged == true) then
-                        if(i == cur) then
-                            icon:AnimaChargedActive()
+                if i <= (cur + bonus_combo_points) then
+                    if(bonus_combo_points > 0 and (cur + bonus_combo_points) > #cpf.icons and i <= ((cur + bonus_combo_points) - #cpf.icons)) then
+                        icon:AdditionalActive()
+                    else
+                        if(is_supercharged == true) then
+                            icon:SuperChargedActive()
                         else
-                            icon:AnimaCharged()
+                            if(bonus_combo_points > 0 and i > cur) then
+                                icon:AdditionalActive()
+                            else
+                                icon:Active()
+                            end
                         end
-					else
-						icon:Active()
-					end
+                    end
                     icon:GraduateFill(1)
                 else
                     if ICON_SPRITE and
-                       power_display_partial and
-                       (power_mod and power_mod > 1)
+                            power_display_partial and
+                            (power_mod and power_mod > 1)
                     then
-                        if i > ceil(cur) then
+                        if i > (ceil(cur) + bonus_combo_points) then
                             -- empty
-							if(is_animacharged == true) then
-								icon:AnimaCharged()
-								icon:GraduateFill(0)
-							else
-								icon:Inactive()
-								icon:GraduateFill(0)
-							end
+                            if(is_supercharged == true) then
+                                icon:SuperCharged()
+                                icon:GraduateFill(0)
+                            else
+                                icon:Inactive()
+                                icon:GraduateFill(0)
+                            end
                         else
-							icon:Active()
+                            icon:Active()
                             icon:GraduateFill(cur - floor(cur))
                         end
                     else
-						if(is_animacharged == true) then
-							icon:AnimaCharged()
-						else
-							icon:Inactive()
-						end
+                        if(is_supercharged == true) then
+                            icon:SuperCharged()
+                        else
+                            icon:Inactive()
+                        end
                     end
                 end
 
@@ -543,6 +568,15 @@ function ele:UpdateConfig()
         end
         if addon.layout.ClassPowers.colours.inactive then
             colours.inactive = addon.layout.ClassPowers.colours.inactive
+        end
+        if addon.layout.ClassPowers.colours.supercharged then
+            colours.supercharged = addon.layout.ClassPowers.colours.supercharged
+        end
+        if addon.layout.ClassPowers.colours.supercharged_active then
+            colours.supercharged_active = addon.layout.ClassPowers.colours.supercharged_active
+        end
+        if addon.layout.ClassPowers.colours.additional_active then
+            colours.additional_active = addon.layout.ClassPowers.colours.additional_active
         end
     end
 
